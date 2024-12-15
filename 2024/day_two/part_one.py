@@ -7,6 +7,10 @@
 # - Any two adjacent levels differ by at least one and at most three.
 import csv
 
+inc_allowed = {1, 2, 3}
+dec_allowed = {-1, -2, -3}
+
+
 def main(): 
     inputDict = []
 
@@ -16,31 +20,20 @@ def main():
         input = csv.reader(inputText)
 
         for i in input:
-            inputDict.append(i[0].split(' '))
+            inputDict.append([int(val) for val in i[0].split(' ')])
 
     for i in inputDict: 
-        if isDecrementing(i) or isIncrementing(i): 
-            print(i)
+        if isIncrementingOrDecrementing(i, inc_allowed) or isIncrementingOrDecrementing(i, dec_allowed): 
             safeList.append(i)
 
     return len(safeList)
         
 
-
-def isDecrementing(inputRow): 
+def isIncrementingOrDecrementing(inputRow, allowed_vals): 
     for i in range(len(inputRow)-1): 
-        diff = int(inputRow[i+1]) - int(inputRow[i])
-        if (diff > 3 or diff < 1):
+        if inputRow[i+1] - inputRow[i] not in allowed_vals:
             return False
     return True
-
-def isIncrementing(inputRow):  
-    for i in range(len(inputRow)-1): 
-        diff = int(inputRow[i+1]) - int(inputRow[i])
-        if (diff < -3 or diff >= 0): 
-            return False
-    return True
-
 
 if __name__ == "__main__": 
     print(main())
