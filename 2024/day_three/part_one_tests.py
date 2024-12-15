@@ -3,6 +3,9 @@ import unittest
 from part_one import regex_finder
 
 class RegexFinderTest(unittest.TestCase):
+    """
+        Test the regex match works as expected
+    """
     def test_no_match(self):
         # no results in regex without match
         result = regex_finder('hello')

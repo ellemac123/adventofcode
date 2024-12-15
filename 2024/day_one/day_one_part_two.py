@@ -1,9 +1,11 @@
-# Prompt: This time, you'll need to figure out exactly how often
-# each number from the left list appears in the right list.
-# Calculate a total similarity score by adding up each number in the left
-# list after multiplying it by the number of times that number 
-# appears in the right list. eg: the number is 3 and it is in the other 
-# list 2 times; score is 3 * 2 = 6
+"""
+Prompt: This time, you'll need to figure out exactly how often
+each number from the left list appears in the right list.
+Calculate a total similarity score by adding up each number in the left
+list after multiplying it by the number of times that number 
+appears in the right list. eg: the number is 3 and it is in the other 
+list 2 times; score is 3 * 2 = 6
+"""
 import csv
 from collections import Counter
 

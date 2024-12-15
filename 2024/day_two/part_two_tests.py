@@ -2,6 +2,9 @@ import unittest
 from part_two import isIncrementingOrDecrementing, inc_allowed, dec_allowed, isSafe, isSafeWithOneRemoved
 
 class TestIsDecrementing(unittest.TestCase): 
+    """
+        Test cases for decrementing values 
+    """
     def test_decrementing_series(self):
         decRow = [46, 45, 44, 43, 41]
         result = isIncrementingOrDecrementing(decRow, dec_allowed)
@@ -28,7 +31,9 @@ class TestIsDecrementing(unittest.TestCase):
         self.assertEqual(result, False)
     
     def test_dec_with_one_unsafe(self): 
-        # should be able to have one removable unsafe
+        """
+            should be able to have one removable unsafe
+        """
         decRow = [50, 47, 45, 44, 44, 41]
         result = isSafeWithOneRemoved(decRow)
         self.assertEqual(result, True)
@@ -64,6 +69,10 @@ class TestIsDecrementing(unittest.TestCase):
         self.assertEqual(result, True)
 
 class TestIsIncrementing(unittest.TestCase): 
+    """
+        Test cases for incrementing values 
+    """
+
     def test_incrementing_series(self):
         incRow = [33, 34, 37, 39, 40, 43]
         result = isIncrementingOrDecrementing(incRow, inc_allowed)
