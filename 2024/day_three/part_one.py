@@ -14,8 +14,8 @@ Your puzzle answer was `191183308`
 import re
 
 def regex_finder(input):
-    regex = r'mul\(\d+\,\d+\)'
-    found_results = re.findall(regex, input)
+    regex = re.compile(r'mul\(\d+\,\d+\)')
+    found_results = regex.findall(input)
     return found_results
     
 def sum_of_multipliers(input): 
