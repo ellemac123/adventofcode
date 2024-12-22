@@ -7,6 +7,10 @@ positions = {
 }
 
 def count_traversals(final_list): 
+    """
+        Count up all the X's in the list 
+        return the total count + 1 for the final resting spot of v
+    """
     count = 0
     for i in final_list: 
         for j in i: 
@@ -24,6 +28,10 @@ def find_v(input_list):
             return i, input_list[i].index('^')
 
 def progress_map(input_list, current_row, current_column): 
+    """
+        Progress through the map, leaving an X everywhere you 
+        went
+    """
     new_list = []
     for i in input_list: 
         new_list.append(list(i))
