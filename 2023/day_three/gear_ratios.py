@@ -94,7 +94,6 @@ def get_partial_number(location_y, row):
             break
         else:
             digit = row[location_y] + digit
-            print('digit update: ', digit)
             location_y = location_y - 1
     location_y = old_loc + 1
     while True:
