@@ -8,9 +8,7 @@ your sum. (Periods (.) do not count as a symbol.)
 Of course, the actual engine schematic is much larger. What is the sum of all
 the part numbers in the engine schematic?
 """
-import math
 import re
-from functools import reduce
 
 DIRECTIONS = [
     # row, col
