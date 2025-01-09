@@ -8,7 +8,9 @@ your sum. (Periods (.) do not count as a symbol.)
 Of course, the actual engine schematic is much larger. What is the sum of all
 the part numbers in the engine schematic?
 """
+import math
 import re
+from functools import reduce
 
 DIRECTIONS = [
     # row, col
@@ -83,6 +85,75 @@ def find_matches(digits, file_input):
     integer_numbers = [int(dig) for dig in finals]
     return integer_numbers
 
+
+def get_partial_number(location_y, row):
+    old_loc = location_y
+    digit = ''
+    while True:
+        if location_y < 0 or not row[location_y].isdigit():
+            break
+        else:
+            digit = row[location_y] + digit
+            print('digit update: ', digit)
+            location_y = location_y - 1
+    location_y = old_loc + 1
+    while True:
+        if location_y > len(row) or not row[location_y].isdigit():
+            break
+        else:
+            digit = digit + row[location_y]
+            location_y = location_y + 1
+    if digit:
+        return int(digit)
+
+
+
+def find_part_two_items(input):
+    """
+    Find each gear and return its part number.
+    A gear is any * symbol that is adjacent to exactly two part numbers.
+    Its gear ratio is the result of multiplying those two numbers together.
+    """
+    new_digit_list = [list(row) for row in input]
+
+    star_locations = []
+    for row in range(len(new_digit_list)):
+        if '*' in new_digit_list[row]:
+            # if there is a star in the row
+            for val in range(len(new_digit_list[row])):
+                # loop through the row bec there might be a lot of stars
+                if new_digit_list[row][val] == '*':
+                    # if the value is a star
+                    multiply_vals = set()
+                    for x in DIRECTIONS:
+                        if new_digit_list[row + x[0]][val + x[1]].isdigit():
+                            # check there are digits near it
+                            # get part number
+                            multiply_vals.add(get_partial_number(val + x[1], new_digit_list[row + x[0]]))
+
+                    # add digits loc to a list
+                    # if length of values is > 1 at the end
+                    # add all that to the main list
+                    if len(multiply_vals) > 1:
+                        star_locations.append(multiply_vals)
+    return star_locations
+
+def sum_set(locations):
+    """
+    Suboptimal but get the product of each set
+    and return the sum of all the products
+    """
+    finals = []
+
+    for i in locations:
+        mult = 1
+        for val in i:
+            mult *= val
+        if mult > 1:
+            finals.append(mult)
+
+    return sum(finals)
+
 if __name__ == "__main__":
     """
     Read file
@@ -101,5 +172,7 @@ if __name__ == "__main__":
 
     digits = find_symbols(file_input, special_characters)
     matches = find_matches(digits, file_input)
-
     print("the solution for round 1 is: ", sum(matches))
+
+    items = find_part_two_items(file_input)
+    print("the solution for round 1 is: ", sum_set(items))
