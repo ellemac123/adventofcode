@@ -10,8 +10,8 @@ def create_shape(input_file):
     new_list = []
     for line in input_file: 
         split = line.strip().split(':')
-        total = split[0]
-        numerics = split[1].strip().split(' ')
+        total = int(split[0])
+        numerics = [int(n) for n in split[1].strip().split(' ')]
         new_list.append((total, numerics))
 
     return new_list
@@ -50,11 +50,7 @@ def run(shaped_data, part_two=False):
     if so add to count, sum and return
     """
     totals = []
-
-    for i in shaped_data:
-        sum_ = int(i[0])
-        values = [int(num) for num in i[1]]
-
+    for sum_, values in shaped_data:
         if part_two:
             combos = (list(product('+|*', repeat=len(values) - 1)))
         else:
@@ -75,7 +71,6 @@ def run(shaped_data, part_two=False):
                 break
 
     return sum(totals)
-
 
 
 if __name__ == "__main__": 
