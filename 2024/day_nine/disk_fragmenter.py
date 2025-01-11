@@ -5,6 +5,10 @@ part one solution:
 
 """
 import re
+
+from nltk.inference.mace import spacer
+
+
 def convert_to_list(file_line):
     """
     Convert the list into the files and free space indicator
@@ -17,53 +21,40 @@ def convert_to_list(file_line):
         for a in range(int(file_line[i])):
             conversion_string.append(str(id))
         if i+1 < len(file_line):
-            for b in range(int(file_line[i + 1])):
-                conversion_string.append('.')
+            conversion_string.extend(['.'] * int(file_line[i + 1]))
         id = id + 1
         i += 2
-    print(conversion_string)
     return conversion_string
 
 def move_file_blocks(space_indicator_list):
-    pattern = r'\.'
-    ra = int(len(space_indicator_list) / 2) + 2
-    print('here')
-    for i in range(1, ra):
-        # traversing backwards in the list
-        # check if the number is a digit
-        # if not, continue on
-        if space_indicator_list[-i].isdigit():
-            stringed = ''.join(space_indicator_list)
-            match = re.search(pattern, stringed)
-            try:
-                loc = match.start()
-            except:
-                break
-            val = space_indicator_list[-i]
+    dots = 1
+    new_list = []
+    space_copy = space_indicator_list.copy()
+    for i in range(len(space_indicator_list)):
+        if (dots + len(new_list)) == len(space_indicator_list):
+            break
+        elif space_indicator_list[i] == '.':
+            dots = dots + 1
+            string = ''.join(space_copy).rstrip('.')
+            space_copy = list(string)[:-1]
+            if string:
+                new_list.append(int(string[-1]))
+        else:
+           new_list.append(int(space_indicator_list[i]))
 
-
-            space_indicator_list[loc] = val
-            space_indicator_list[-i] = 'X'
-
-    return space_indicator_list
+    return new_list[:-1]
 
 def product_time(final_list):
-    biggy = []
-    for i in final_list:
-        if i.isdigit():
-            biggy.append(i)
-
     prods = []
-    for v in range(len(biggy)):
-        f = v * int(biggy[v])
+    for v in range(len(final_list)):
+        f = v * int(final_list[v])
         prods.append(f)
-
     return sum(prods)
 
 
 
 if __name__ == "__main__":
-    with open('input.txt', 'r') as input_file:
+    with open('tiny_input.txt', 'r') as input_file:
         line = input_file.readline()
 
     converted_list = convert_to_list(list(line))
