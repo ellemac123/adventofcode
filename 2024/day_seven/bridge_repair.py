@@ -6,7 +6,7 @@ solution for part 1:  303766880536
 
 from itertools import product
 
-def create_shape(input_file): 
+def create_shape(input_file):
     new_list = []
     for line in input_file: 
         split = line.strip().split(':')
@@ -27,7 +27,10 @@ def evaluate_string(total, values_array):
             if not values_array[i + 1].isdigit(): 
                 if values_array[i + 1] == '+': 
                     values_array[i] = sum([values_array[i], values_array[i+2]])
-                else: 
+                elif values_array[i + 1] == '|':
+                    digit = str(values_array[i]) + str(values_array[i + 2])
+                    values_array[i] = int(digit)
+                else:
                     values_array[i] = multiply(values_array[i], values_array[i+2])
                 
                 values_array.pop(i+2)
@@ -39,7 +42,7 @@ def evaluate_string(total, values_array):
         return True
     return False
 
-def run(shaped_data):
+def run(shaped_data, part_two=False):
     """
     Given a list, call check_match to see if there is a way to
     create the total from the list
@@ -47,11 +50,17 @@ def run(shaped_data):
     if so add to count, sum and return
     """
     totals = []
-    for i in shaped_data: 
+
+    for i in shaped_data:
         sum_ = int(i[0])
         values = [int(num) for num in i[1]]
-        combos = (list(product('+*', repeat=len(values)-1)))
-        for iter in range(len(combos)): 
+
+        if part_two:
+            combos = (list(product('+|*', repeat=len(values) - 1)))
+        else:
+            combos = (list(product('+*', repeat=len(values) - 1)))
+
+        for iter in range(len(combos)):
             """loop through all the combos"""
             final = []
             operator_string = combos[iter]
@@ -71,7 +80,7 @@ def run(shaped_data):
 
 if __name__ == "__main__": 
     file_input = []
-    with open('input.txt', 'r') as file: 
+    with open('input.txt', 'r') as file:
         for line in file.readlines(): 
             file_input.append(line.strip())
 
@@ -79,3 +88,4 @@ if __name__ == "__main__":
     totals = run(shaped_list)
 
     print('solution for part 1: ', totals)
+    print('solution for part 2: ', run(shaped_list, part_two=True))
