@@ -1,14 +1,10 @@
 """
 https://adventofcode.com/2024/day/9
 
+tiny_input solution: 1928
 part one solution:
 
 """
-import re
-
-from nltk.inference.mace import spacer
-
-
 def convert_to_list(file_line):
     """
     Convert the list into the files and free space indicator
@@ -22,7 +18,7 @@ def convert_to_list(file_line):
             conversion_string.append(str(id))
         if i+1 < len(file_line):
             conversion_string.extend(['.'] * int(file_line[i + 1]))
-        id = id + 1
+        id += 1
         i += 2
     return conversion_string
 
@@ -45,11 +41,15 @@ def move_file_blocks(space_indicator_list):
     return new_list[:-1]
 
 def product_time(final_list):
-    prods = []
-    for v in range(len(final_list)):
-        f = v * int(final_list[v])
-        prods.append(f)
-    return sum(prods)
+    """
+    Calculate the sum of all the products of position
+    and number at that position
+    """
+    total = 0
+    for v, num in enumerate(final_list):
+        total += v * num
+
+    return total
 
 
 
