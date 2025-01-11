@@ -19,18 +19,23 @@ def find_difference(coordinates_set, puzzle_input):
     diff = (coord_one[0] - coord_two[0], coord_one[1] - coord_two[1])
 
     if diff[0] <= 0:
-        if coord_one[0] + diff[0] >= 0 and coord_one[1] + diff[1] >= 0:
+        right_dir_row = coord_one[0] + diff[0]
+        right_dir_col = coord_one[1] + diff[1]
+        if right_dir_col >= 0 and right_dir_row >= 0:
             try:
-                if puzzle_input[coord_one[0] + diff[0]][coord_one[1] + diff[1]] == '.':
-                    puzzle_input[coord_one[0] + diff[0]][coord_one[1] + diff[1]] = "#"
-                extra_set.add((coord_one[0] + diff[0], coord_one[1] + diff[1]))
+                if puzzle_input[right_dir_row][right_dir_col] == '.':
+                    puzzle_input[right_dir_row][right_dir_col] = "#"
+                extra_set.add((right_dir_row, right_dir_col))
             except IndexError:
                 pass
-        if coord_two[0] - diff[0] >= 0 and coord_two[1] - diff[1] >= 0:
+
+        left_dir_row = coord_two[0] - diff[0]
+        left_dir_col = coord_two[1] - diff[1]
+        if left_dir_row >= 0 and left_dir_col >= 0:
             try:
-                if puzzle_input[coord_two[0] - diff[0]][coord_two[1] - diff[1]] == '.':
-                    puzzle_input[coord_two[0] - diff[0]][coord_two[1] - diff[1]] = "#"
-                extra_set.add((coord_two[0] - diff[0], coord_two[1] - diff[1]))
+                if puzzle_input[left_dir_row][left_dir_col] == '.':
+                    puzzle_input[left_dir_row][left_dir_col] = "#"
+                extra_set.add((left_dir_row, left_dir_col))
             except IndexError:
                 pass
     return puzzle_input, extra_set
