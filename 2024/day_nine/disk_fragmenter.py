@@ -1,8 +1,8 @@
 """
 https://adventofcode.com/2024/day/9
 
-tiny_input solution: 1928
-part one solution:
+solution for tiny_input.txt part one: 1928
+solution for part one: 6259790630969
 
 """
 def convert_to_list(file_line):
@@ -27,18 +27,22 @@ def move_file_blocks(space_indicator_list):
     new_list = []
     space_copy = space_indicator_list.copy()
     for i in range(len(space_indicator_list)):
-        if (dots + len(new_list)) == len(space_indicator_list):
+        if '.' not in space_copy:
+            new_list.extend([int(n) for n in space_copy])
             break
         elif space_indicator_list[i] == '.':
             dots = dots + 1
             string = ''.join(space_copy).rstrip('.')
-            space_copy = list(string)[:-1]
+            space_copy = list(string)[1:-1]
+
             if string:
                 new_list.append(int(string[-1]))
-        else:
-           new_list.append(int(space_indicator_list[i]))
 
-    return new_list[:-1]
+        else:
+            space_copy = space_copy[1:]
+            new_list.append(int(space_indicator_list[i]))
+
+    return new_list
 
 def product_time(final_list):
     """
@@ -47,7 +51,8 @@ def product_time(final_list):
     """
     total = 0
     for v, num in enumerate(final_list):
-        total += v * num
+        if num != '.':
+            total += v * num
 
     return total
 
@@ -59,4 +64,5 @@ if __name__ == "__main__":
 
     converted_list = convert_to_list(list(line))
     space_list = move_file_blocks(converted_list)
-    print(product_time(space_list))
+    total_sum = product_time(space_list)
+    print('solution for part one:', total_sum)
