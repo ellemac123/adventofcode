@@ -1,5 +1,8 @@
 """
 https://adventofcode.com/2024/day/8
+
+The solution for part 1 is: 303
+
 """
 from itertools import product
 
