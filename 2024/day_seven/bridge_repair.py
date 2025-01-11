@@ -2,6 +2,7 @@
 https://adventofcode.com/2024/day/7
 
 solution for part 1:  303766880536
+solution for part 2:  337041851384440
 """
 
 from itertools import product
