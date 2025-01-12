@@ -22,27 +22,45 @@ def convert_to_list(file_line):
         i += 2
     return conversion_string
 
-def move_file_blocks(space_indicator_list):
-    dots = 1
-    new_list = []
-    space_copy = space_indicator_list.copy()
-    for i in range(len(space_indicator_list)):
-        if '.' not in space_copy:
-            new_list.extend([int(n) for n in space_copy])
-            break
-        elif space_indicator_list[i] == '.':
-            dots = dots + 1
-            string = ''.join(space_copy).rstrip('.')
-            space_copy = list(string)[1:-1]
+def move_file_blocks(original_list):
 
-            if string:
-                new_list.append(int(string[-1]))
+    """
+    Given a 'original' list, remove all the dots and put
+    them in a new 'numbers' list
 
+    create a finals empty list
+
+    loop through the original list
+
+    if value is digit
+    append to final list
+    pop first value in the numbers list
+
+    if its a dot
+    append numbers[-1] to finals list
+    remove numbers[-1] from the numbers list
+
+    end and return if the numbers list is empty
+    """
+
+    numbers_list = [i for i in original_list if i != '.']
+    # create a 'finals' empty list
+    final_list = []
+
+    # loop through original loop
+    for _, value in enumerate(original_list):
+        # if value is a number
+        # append [0] to finals list
+        # remove [0] from the numbers list
+        if numbers_list:
+            if value.isdigit():
+                final_list.append(int(numbers_list[0]))
+                numbers_list.pop(0)
+            else:
+                final_list.append(int(numbers_list[-1]))
+                numbers_list.pop()
         else:
-            space_copy = space_copy[1:]
-            new_list.append(int(space_indicator_list[i]))
-
-    return new_list
+            return final_list
 
 def product_time(final_list):
     """
@@ -59,7 +77,7 @@ def product_time(final_list):
 
 
 if __name__ == "__main__":
-    with open('tiny_input.txt', 'r') as input_file:
+    with open('input.txt', 'r') as input_file:
         line = input_file.readline()
 
     converted_list = convert_to_list(list(line))
