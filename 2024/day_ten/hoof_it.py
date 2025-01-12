@@ -37,10 +37,12 @@ def check_each_trailhead(trailhead_map, trailhead_coordinates):
     """
     Given a map and coordinates of all the trailheads
 
-    loop through the coodinates
-    checking each trailhead to the end
+    loop through the coordinates
+    make a deep copy of the map since it will be modified by the coordinates
+    it's modified because we only care that we can get to each 9
+    not how many paths we can get there by
 
-    increase trailhead if direction has it
+    increase total sum for each trailhead by the number of 9s it can reach
     """
     sum = 0
     for coordinate in trailhead_coordinates:
@@ -53,11 +55,26 @@ def check_each_trailhead(trailhead_map, trailhead_coordinates):
         for direction in directions:
             sum += check(row + direction[0], col + direction[1], map, value)
 
-
     return sum
 
-
 def check(row, col, map, prev_value):
+    """
+    Using recursion
+    check that i am in bounds of the map
+        if not return zero
+    if yes
+        check if I am a 9
+            if yes
+            set my location to X so i cannot be revisited by the same trailhead
+            return a 1 to increase the number of peaks this trailhead can reach
+        if not a 9
+            check if i am one greater than my previous value
+                if yes
+                    check each direction recurrsively
+                if no
+                    return zero
+    return sum of each direction ive travelled
+    """
     if row < 0 or row >= len(map) or col < 0 or col >= len(map[0]):
         return 0
     current_value = map[row][col]
@@ -65,19 +82,17 @@ def check(row, col, map, prev_value):
     if current_value == 9 and prev_value == 8:
         map[row][col] = 'X'
         return 1
-
     elif current_value != prev_value + 1:
         return 0
     else:
-        # current value is + greater than the previous value, traverse
+        # current value is + 1 greater than the previous value,
+        # therefor traverse each direction
         paths = 0
         for direction in directions:
             next_row = row + direction[0]
             next_col = col + direction[1]
             paths += check(next_row, next_col, map, map[row][col])
     return paths
-
-
 
 if __name__ == '__main__':
     with open('input.txt', 'r') as f:
