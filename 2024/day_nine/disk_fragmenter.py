@@ -5,6 +5,9 @@ solution for tiny_input.txt part one: 1928
 solution for part one: 6259790630969
 
 """
+from collections import Counter
+
+
 def convert_to_list(file_line):
     """
     Convert the list into the files and free space indicator
@@ -68,19 +71,74 @@ def product_time(final_list):
     and number at that position
     """
     total = 0
+
     for v, num in enumerate(final_list):
         if num != '.':
-            total += v * num
+            total += v * int(num)
 
     return total
 
+
+def move_part_two(original_numbers):
+    """
+    given an original list of numerics
+    create a list of just the numbers
+    create a dict of the numbers and their count
+
+    create a list of "final" numbers
+
+    loop through the "numbers list"
+    get the count for the number and the first index of it
+
+    look in the original list between the start and it's index
+
+    if there is a spaceof dots >= to the numbers count
+
+
+
+    """
+    numbers = sorted(set([int(i) for i in original_numbers if i != '.']), reverse=True)
+    numbers = [str(i) for i in numbers]
+    finals = original_numbers.copy()
+    print(finals)
+    print(numbers)
+    counter = Counter(original_numbers)
+    # loop through "numbers" time
+    for numb in numbers:
+        length_number = counter[numb]
+
+        try:
+            first_spot = finals.index(str(numb))
+        except ValueError:
+            import pdb; pdb.set_trace()
+        joined_final_string = ''.join(finals)
+
+        create_substring = '.' * length_number
+        try:
+            index_of_substring = joined_final_string[:first_spot].index(create_substring)
+            if index_of_substring != -1 and index_of_substring < first_spot:
+                moving = [str(numb)] * length_number
+                finals[index_of_substring:index_of_substring + length_number] = list(moving)
+                finals[first_spot:first_spot + length_number] = ['.'] * length_number
+        except ValueError:
+            pass
+
+    return finals
 
 
 if __name__ == "__main__":
     with open('input.txt', 'r') as input_file:
         line = input_file.readline()
 
-    converted_list = convert_to_list(list(line))
-    space_list = move_file_blocks(converted_list)
-    total_sum = product_time(space_list)
-    print('solution for part one:', total_sum)
+    listed_line = list(line)
+
+    converted_list = convert_to_list(listed_line)
+    # space_list = move_file_blocks(converted_list)
+    # total_sum = product_time(space_list)
+    # print('solution for part one:', total_sum)
+
+
+    part_two = move_part_two(converted_list)
+    total_sum_two = product_time(part_two)
+    print('solution for part two:', total_sum_two)
+
