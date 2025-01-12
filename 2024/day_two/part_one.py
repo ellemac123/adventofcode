@@ -12,7 +12,6 @@ import csv
 inc_allowed = {1, 2, 3}
 dec_allowed = {-1, -2, -3}
 
-
 def main(): 
     inputDict = []
 

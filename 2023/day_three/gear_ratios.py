@@ -1,12 +1,8 @@
 """
-The engine schematic (your puzzle input) consists of a visual
-representation of the engine. There are lots of numbers and symbols
-you don't really understand, but apparently any number adjacent to a
-symbol, even diagonally, is a "part number" and should be included in
-your sum. (Periods (.) do not count as a symbol.)
+https://adventofcode.com/2023/day/3
 
-Of course, the actual engine schematic is much larger. What is the sum of all
-the part numbers in the engine schematic?
+the solution for round 1 is:  549908
+the solution for round 1 is:  81166799
 """
 import re
 
@@ -85,6 +81,9 @@ def find_matches(digits, file_input):
 
 
 def get_partial_number(location_y, row):
+    """
+    Get the full partial number and return as an integer
+    """
     old_loc = location_y
     digit = ''
     while True:
@@ -137,7 +136,7 @@ def find_part_two_items(input):
 
 def sum_set(locations):
     """
-    Suboptimal but get the product of each set
+    Get the product of each set
     and return the sum of all the products
     """
     finals = []
@@ -165,6 +164,7 @@ if __name__ == "__main__":
             file_input.append(row)
             special_characters.update([a for a in re.findall(regex, row)])
 
+    # remove \n since newlines in the input file
     special_characters.remove('\n')
 
     digits = find_symbols(file_input, special_characters)

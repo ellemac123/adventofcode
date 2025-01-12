@@ -34,8 +34,8 @@ In this example, if you were to follow the strategy guide, you would get a total
 What would your total score be if everything goes exactly according to your strategy guide?
 Solution for part one:  12156
 Solution for part two:  10835
-
 """
+
 SCORES = {
     'X': 1,
     'Y': 2,

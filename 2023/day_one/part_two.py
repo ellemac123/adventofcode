@@ -13,13 +13,10 @@ zoneight234
 7pqrstsixteen
 In this example, the calibration values are 29, 83, 13, 24, 42, 14, and 76. Adding these together produces 281.
 
-What is the sum of all of the calibration values?
+What is the sum of all the calibration values?
 
 Your puzzle answer was 54875.
 """
-import re
-from part_one import sum_calibration
-
 digits = {
     'one': 1, 
     'two': 2, 
@@ -58,4 +55,4 @@ if __name__ == "__main__":
     with open('input.txt', 'r') as input_file: 
         a = input_file.read().splitlines()
 
-    print(mapping(a))
+    print('Your puzzle answer was: ', mapping(a))

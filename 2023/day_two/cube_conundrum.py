@@ -15,6 +15,7 @@ For each game, find the minimum set of cubes that must have been present. What i
 Your puzzle answer was 59795.
 """
 import math
+
 colour_rules = {
     'red': 12, 
     'green': 13, 

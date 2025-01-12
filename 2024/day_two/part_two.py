@@ -13,9 +13,9 @@ import csv
 
 inc_allowed = {1, 2, 3}
 dec_allowed = {-1, -2, -3}
+
 def main(): 
     inputDict = []
-
     safeList = []
 
     with open('input.txt') as inputText:
@@ -25,7 +25,7 @@ def main():
             inputDict.append([int(val) for val in i[0].split(' ')])
 
     for checkList in inputDict: 
-        if isSafe(checkList) or isSafeWithOneRemoved(checkList): 
+        if is_safe(checkList) or isSafeWithOneRemoved(checkList):
             safeList.append(i)
 
     return len(safeList)
@@ -37,7 +37,7 @@ def isIncrementingOrDecrementing(inputRow, allowed_vals):
             return False
     return True
 
-def isSafe(checkList): 
+def is_safe(checkList):
     if isIncrementingOrDecrementing(checkList, inc_allowed) or isIncrementingOrDecrementing(checkList, dec_allowed): 
         return True
     else: 
@@ -47,7 +47,7 @@ def isSafe(checkList):
 def isSafeWithOneRemoved(checkList): 
     for i in range(len(checkList)): 
         newList = checkList[:i] + checkList[i+1:]
-        if isSafe(newList): 
+        if is_safe(newList):
             return True
     return False
 
