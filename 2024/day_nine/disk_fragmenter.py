@@ -2,10 +2,11 @@
 https://adventofcode.com/2024/day/9
 
 solution for tiny_input.txt part one: 1928
-solution for part one: 6259790630969
+solution for tiny_input.txt part two: 2858
 
+solution for part one: 6259790630969
+solution for part two: 6289564433984
 """
-from asyncio import create_subprocess_exec
 from collections import Counter
 
 
@@ -79,6 +80,18 @@ def product_time(final_list):
 
     return total
 
+def find_sublist(sublist, main_list):
+    """
+        Given a main_list - find first occurrence of given
+        sublist in main_list
+
+        return the index of the first occurrence of given or -1 if dne
+    """
+    len_sublist = len(sublist)
+    for i in range(len(main_list) - len_sublist + 1):
+        if sublist == main_list[i:i+len_sublist]:
+            return i
+    return -1
 
 def move_part_two(original_numbers):
     """
@@ -94,31 +107,24 @@ def move_part_two(original_numbers):
     look in the original list between the start and it's index
 
     if there is a spaceof dots >= to the numbers count
-
-
-
     """
-    numbers = sorted(set([int(i) for i in original_numbers if i != '.']), reverse=True)
+    numbers = int(max(original_numbers)) + 1
+    numbers = sorted([i for i in range(0, numbers)], reverse=True)
+    numbers = [str(n) for n in numbers]
+
     finals = original_numbers[:]
     counter = Counter(original_numbers)
     # loop through "numbers" time
     for numb in numbers:
         length_number = counter[numb]
+        first_spot = finals.index(numb)
 
+        create_substring = ['.'] * length_number
         try:
-            first_spot = finals.index(str(numb))
-        except ValueError:
-            import pdb; pdb.set_trace()
-        joined_final_string = ''.join(finals)
-
-        create_substring = '.' * length_number
-        try:
-            index_of_substring = joined_final_string[:first_spot].index(create_substring)
+            index_of_substring = find_sublist(create_substring, finals)
             if index_of_substring != -1 and index_of_substring < first_spot:
                 moving = [str(numb)] * length_number
-                create_substring = list(create_substring)
                 finals = finals[:index_of_substring] + moving + finals[index_of_substring+length_number:first_spot] + create_substring + finals[first_spot + length_number:]
-
         except ValueError:
             pass
 
@@ -126,15 +132,15 @@ def move_part_two(original_numbers):
 
 
 if __name__ == "__main__":
-    with open('input.txt', 'r') as input_file:
+    with open('tiny_input.txt', 'r') as input_file:
         line = input_file.readline()
 
     listed_line = list(line)
 
     converted_list = convert_to_list(listed_line)
-    # space_list = move_file_blocks(converted_list)
-    # total_sum = product_time(space_list)
-    # print('solution for part one:', total_sum)
+    space_list = move_file_blocks(converted_list)
+    total_sum = product_time(space_list)
+    print('solution for part one:', total_sum)
 
 
     part_two = move_part_two(converted_list)
