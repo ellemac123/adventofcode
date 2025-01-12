@@ -5,6 +5,7 @@ solution for tiny_input.txt part one: 1928
 solution for part one: 6259790630969
 
 """
+from asyncio import create_subprocess_exec
 from collections import Counter
 
 
@@ -98,10 +99,7 @@ def move_part_two(original_numbers):
 
     """
     numbers = sorted(set([int(i) for i in original_numbers if i != '.']), reverse=True)
-    numbers = [str(i) for i in numbers]
-    finals = original_numbers.copy()
-    print(finals)
-    print(numbers)
+    finals = original_numbers[:]
     counter = Counter(original_numbers)
     # loop through "numbers" time
     for numb in numbers:
@@ -118,8 +116,9 @@ def move_part_two(original_numbers):
             index_of_substring = joined_final_string[:first_spot].index(create_substring)
             if index_of_substring != -1 and index_of_substring < first_spot:
                 moving = [str(numb)] * length_number
-                finals[index_of_substring:index_of_substring + length_number] = list(moving)
-                finals[first_spot:first_spot + length_number] = ['.'] * length_number
+                create_substring = list(create_substring)
+                finals = finals[:index_of_substring] + moving + finals[index_of_substring+length_number:first_spot] + create_substring + finals[first_spot + length_number:]
+
         except ValueError:
             pass
 
