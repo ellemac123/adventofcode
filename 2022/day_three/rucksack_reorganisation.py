@@ -2,6 +2,7 @@
 https://adventofcode.com/2022/day/3
 
 the solution for part one is:  7850
+the solution for part two is:  2581
 """
 def organise_lists(file_input_list):
     """
@@ -52,12 +53,49 @@ def find_twin_sum(twin_list):
     return total
 
 
+def organise_part_two(file_input_list):
+    """
+    Given an ugly input file
+    Split into a list of lists
+    where each row contains 3 lists,
+        one for each of the elves
+    return the newly formatted list
+    """
+    finals = []
+    # create an iterator of the input list
+    file_input_list = iter(file_input_list)
+
+    # zip through each of the file input lines
+    for one, two, three in zip(file_input_list, file_input_list, file_input_list) :
+        # create a list with 3 of the rows
+        finals.append([list(one.strip()), list(two.strip()), list(three.strip())])
+    return finals
+
+def find_triplets(triplet_list):
+    triplets = []
+    for triplet in triplet_list:
+        # find triplet thats the shortest
+        # loop through and see if its in both
+        first_triple = set(triplet[0])
+        for item in first_triple:
+            if item in triplet[1] and item in triplet[2]:
+                triplets.append(item)
+    return triplets
+
 if __name__ == "__main__":
     with open('input.txt', 'r') as f:
         a = f.readlines()
 
+    # Part One Solution!!
     split_list = organise_lists(a)
     twins = find_twins(split_list)
     sum_ = find_twin_sum(twins)
 
     print('the solution for part one is: ', sum_)
+
+    # Part Two Solution!
+    part_two_organisation_list = organise_part_two(a)
+    triplets = find_triplets(part_two_organisation_list)
+    sum_two = find_twin_sum(triplets)
+
+    print('the solution for part two is: ', sum_two)
