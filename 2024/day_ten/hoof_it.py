@@ -2,6 +2,7 @@
 https://adventofcode.com/2024/day/10
 
 Solution for day 10 part one: 482
+Solution for day 10 part two: 1094
 """
 import copy
 directions = [
@@ -33,7 +34,7 @@ def find_trailhead_positions(map):
 
     return trailhead_coordinates
 
-def check_each_trailhead(trailhead_map, trailhead_coordinates):
+def check_each_trailhead(trailhead_map, trailhead_coordinates, part_two=False):
     """
     Given a map and coordinates of all the trailheads
 
@@ -53,11 +54,11 @@ def check_each_trailhead(trailhead_map, trailhead_coordinates):
 
         # check each direction
         for direction in directions:
-            sum += check(row + direction[0], col + direction[1], map, value)
+            sum += check(row + direction[0], col + direction[1], map, value, part_two)
 
     return sum
 
-def check(row, col, map, prev_value):
+def check(row, col, map, prev_value, part_two):
     """
     Using recursion
     check that i am in bounds of the map
@@ -80,7 +81,8 @@ def check(row, col, map, prev_value):
     current_value = map[row][col]
 
     if current_value == 9 and prev_value == 8:
-        map[row][col] = 'X'
+        if not part_two:
+            map[row][col] = 'X'
         return 1
     elif current_value != prev_value + 1:
         return 0
@@ -91,7 +93,7 @@ def check(row, col, map, prev_value):
         for direction in directions:
             next_row = row + direction[0]
             next_col = col + direction[1]
-            paths += check(next_row, next_col, map, map[row][col])
+            paths += check(next_row, next_col, map, map[row][col], part_two)
     return paths
 
 if __name__ == '__main__':
@@ -102,5 +104,8 @@ if __name__ == '__main__':
     trailhead_map = format_input(a)
     trailhead_coords = find_trailhead_positions(trailhead_map)
     trailhead_sums = check_each_trailhead(trailhead_map, trailhead_coords)
+    trailhead_sums_two = check_each_trailhead(trailhead_map, trailhead_coords, part_two=True)
+
 
     print("Solution for day 10 part one:", trailhead_sums)
+    print("Solution for day 10 part two:", trailhead_sums_two)
