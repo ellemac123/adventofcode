@@ -7,12 +7,14 @@ How many stones will you have after blinking 25 times?
 Solution for Part One:  231278
 initial solution = time =  0:00:00.263549
 tiny input = time =  0:00:00.066682
-Using a Dict over a list = time =  0:00:00.003368
+Using a Dict over a list:
+    Speed:  0:00:00.002515
 
+Part Two:
+How many stones will you have after blinking 75 times?
 
 Part Two with speed improvement:  274229228071551
-time =  0:00:00.112909
-
+    Speed: 0:00:00.112909
 """
 import datetime
 from collections import Counter, defaultdict
@@ -64,11 +66,14 @@ if __name__ == "__main__":
         input_text = f.read()
 
     input_list = format_input_string(input_text)
-    blinks = 75
-
+    blinks = 25
     tim = datetime.datetime.now()
-
-    print('Part Two with speed improvement: ', run(input_list, blinks))
-
+    print('Part One: ', run(input_list, blinks))
     tim2 = datetime.datetime.now()
-    print('time = ', tim2 - tim)
+    print('Part One Time: ', tim2 - tim)
+
+    blinks = 75
+    tim = datetime.datetime.now()
+    print('\nPart Two: ', run(input_list, blinks))
+    tim2 = datetime.datetime.now()
+    print('Part Two Time: ', tim2 - tim)
