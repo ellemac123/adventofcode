@@ -1,6 +1,8 @@
 """
 https://adventofcode.com/2020/day/1
 
+Solution for part one:  319531
+Solution for part two:  244300320
 """
 
 def sum(input_list):
@@ -40,6 +42,5 @@ if __name__ == "__main__":
             input.append(int(line))
 
     print('Solution for part one: ', sum(input))
-
     print('Solution for part two: ', triple_sum(input))
 
