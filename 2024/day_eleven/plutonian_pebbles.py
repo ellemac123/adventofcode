@@ -5,7 +5,7 @@ Part One:
 How many stones will you have after blinking 25 times?
 Solution for Part One:  231278
 """
-
+from functools import lru_cache
 
 def format_input_string(input_string):
     """
@@ -15,6 +15,9 @@ def format_input_string(input_string):
     """
     return [int(num) for num in input_string.strip().split(' ')]
 
+@lru_cache(maxsize=None)
+def cached_mult_by_2024(input):
+    return input * 2024
 
 def blink(stones):
     """
@@ -33,19 +36,21 @@ def blink(stones):
     plutonian_stones = []
 
     for stone in stones:
-        char_stone = str(stone)
         if stone == 0:
             plutonian_stones.append(1)
-        elif (len(char_stone) % 2 == 0):
-            first_split = char_stone[:int(len(char_stone)/2)]
-            second_split = char_stone[int(len(char_stone)/2):]
-
-            # convert to int so you dont keep leading zeros
-            plutonian_stones.append(int(first_split))
-            plutonian_stones.append(int(second_split))
         else:
-            multiplier = stone * 2024
-            plutonian_stones.append(multiplier)
+            char_stone = len(str(stone))
+            if char_stone % 2 == 0:
+                # halfway = 10 to the power of floor divided digits
+                halfway = 10 ** (char_stone // 2)
+                right = stone // halfway
+                left = stone % halfway
+
+                # convert to int so you dont keep leading zeros
+                plutonian_stones.extend([right, left])
+            else:
+                multer = cached_mult_by_2024(stone)
+                plutonian_stones.append(multer)
 
     return plutonian_stones
 
@@ -54,7 +59,7 @@ def run(input_list, blinks):
     Given a list of blinks, transform the input_list that many times
     """
     morphed = input_list
-    for i in range(blinks):
+    for _ in range(blinks):
         morphed = blink(morphed)
 
     return len(morphed)
@@ -65,5 +70,7 @@ if __name__ == "__main__":
 
     input_list = format_input_string(input_text)
     blinks = 25
-
     print('Solution for Part One: ', run(input_list, blinks))
+
+    blinks = 75
+    print('Solution for Part Two: ', run(input_list, blinks))
