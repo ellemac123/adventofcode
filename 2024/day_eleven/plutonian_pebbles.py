@@ -15,10 +15,6 @@ def format_input_string(input_string):
     """
     return [int(num) for num in input_string.strip().split(' ')]
 
-@lru_cache(maxsize=None)
-def cached_mult_by_2024(input):
-    return input * 2024
-
 def blink(stones):
     """
     If the stone is engraved with the number 0,
@@ -46,11 +42,9 @@ def blink(stones):
                 right = stone // halfway
                 left = stone % halfway
 
-                # convert to int so you dont keep leading zeros
                 plutonian_stones.extend([right, left])
             else:
-                multer = cached_mult_by_2024(stone)
-                plutonian_stones.append(multer)
+                plutonian_stones.append(stone*2024)
 
     return plutonian_stones
 
@@ -69,8 +63,8 @@ if __name__ == "__main__":
         input_text = f.read()
 
     input_list = format_input_string(input_text)
-    blinks = 25
-    print('Solution for Part One: ', run(input_list, blinks))
+    # blinks = 25
+    # print('Solution for Part One: ', run(input_list, blinks))
 
     blinks = 75
     print('Solution for Part Two: ', run(input_list, blinks))
