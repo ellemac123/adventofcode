@@ -2,7 +2,7 @@
 https://adventofcode.com/2020/day/2
 
 Valid Policies for Part One:  640
-
+Valid Policies for Part Two:  472
 """
 from collections import Counter
 
@@ -41,6 +41,34 @@ def run(formatted_input):
     return sum
 
 
+def run_part_two(formatted_input):
+    """
+    Loop through and return valid policies
+
+    Each line gives the password policy [0], [1], [2] and then the password[3].
+    The password policy indicates the lowest [0] and highest [1] number of times a
+        given letter [2] must appear for the password [3] to be valid.
+    """
+    sum = 0
+    for line in formatted_input:
+        char_one = line[0] - 1
+        char_two = line[1] - 1
+        polly = line[2]
+        password = list(line[3])
+
+        try:
+            one_ = polly == password[char_one]
+            two_ = polly == password[char_two]
+            if (one_ or two_) and not (one_ and two_):
+                sum = sum + 1
+        except IndexError:
+            # doesnt matter for this puzzle but
+            # would actually handle this a bit smarter
+            print(line)
+    return sum
+
+
+
 if __name__ == "__main__":
     input_file = []
     with open('input.txt', 'r') as f:
@@ -49,3 +77,4 @@ if __name__ == "__main__":
 
     formatted_input = format_input(input_file)
     print('Valid Policies for Part One: ', run(formatted_input))
+    print('Valid Policies for Part Two: ', run_part_two(formatted_input))
