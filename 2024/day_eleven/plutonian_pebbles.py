@@ -33,7 +33,7 @@ def run(input_list, blinks):
     grew exponentially so have swapped to a dict since order isn't important here
     """
     input_list = Counter(input_list)
-    for n in range(blinks):
+    for _ in range(blinks):
         iteration_stone = defaultdict(int)
         for stone in input_list.keys():
             val = input_list[stone]
