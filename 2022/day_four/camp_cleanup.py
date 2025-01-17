@@ -1,10 +1,13 @@
 """
 https://adventofcode.com/2022/day/4
 
+solution for part one:  424
+solution for part two:  804
 """
 def setup_pairs(input_list): 
 
     count = 0
+    part_two_count = 0
     for line in input_list: 
         first_elf = line[0].split('-')
         second_elf = line[1].split('-')
@@ -14,8 +17,12 @@ def setup_pairs(input_list):
 
         if first.issubset(second) or second.issubset(first):
             count += 1
+
+        if any({a}.issubset(second) for a in first) or any({b}.issubset(first) for b in second):
+            part_two_count += 1
+
     
-    return count
+    return count, part_two_count
 
 
 if __name__ == "__main__": 
@@ -25,4 +32,6 @@ if __name__ == "__main__":
             in_line = a.split(',')
             input.append([in_line[0].strip(), in_line[1].strip()])
     
-    print('solution for part one: ', setup_pairs(input))
+    answer_one, answer_two = setup_pairs(input)
+    print('solution for part one: ', answer_one)
+    print('solution for part two: ', answer_two)
