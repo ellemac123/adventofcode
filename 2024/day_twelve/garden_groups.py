@@ -79,8 +79,8 @@ def find_touching(letter, input_list, row_num, col_num):
                 perimeter = perimeter + 1
             elif input_list[check_row][check_col] == letter:
                 input_list, searched_area, searched_perimeter = find_touching(letter, input_list, check_row, check_col)
-                area = area + searched_area
-                perimeter = perimeter + searched_perimeter
+                area += searched_area
+                perimeter += searched_perimeter
 
     return input_list, area, perimeter
 
@@ -95,7 +95,7 @@ def sum_vals(input):
         totals[line[0]] += line[1] * line[2]
 
     for keys in totals.keys():
-       sum_ = sum_ + totals[keys]
+       sum_ += totals[keys]
 
     return sum_
 
