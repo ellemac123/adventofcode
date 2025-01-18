@@ -1,7 +1,7 @@
 """
 https://adventofcode.com/2024/day/12
 
-the answer for part one is:  1477762
+this is currently working for all "outer corners" 
 """
 from collections import Counter, defaultdict
 
@@ -88,14 +88,15 @@ def find_corners(checked_locations):
             # create a list with new count and area and letter
         final_.append([locations[0], locations[1], corners])
 
-
-
     for xi in final_: 
         print(xi)
-
     
     return final_        
 
+"""
+TODO:
+I think we might be able to just check corners and add to a list within the find_touchng !!
+"""
 
 
 def find_touching(letter, input_list, row_num, col_num):
