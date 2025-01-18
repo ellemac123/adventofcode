@@ -1,3 +1,9 @@
+"""
+https://adventofcode.com/2021/day/3
+
+the answer for part 1: 3882564
+"""
+
 from collections import defaultdict
 
 def find_values(input_list): 
