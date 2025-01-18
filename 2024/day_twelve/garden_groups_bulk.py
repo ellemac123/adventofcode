@@ -1,7 +1,7 @@
 """
 https://adventofcode.com/2024/day/12
 
-this is currently working for all "outer corners" 
+the answer for part two is:  923480
 """
 from collections import Counter, defaultdict
 
@@ -12,10 +12,31 @@ DIRECTIONS = [
     (0, -1),  # left
 ]
 
+TRADITIONAL_CORNER = [
+    # A corner is when there is no one above me or next to me to the right direction
+    [(-1, 0), (0, 1)], 
+    # # A corner is when there is no one below me or next to me to the right direction
+    [(1, 0), (0, 1)],
+    # A corner is when there is no one above me or next to me to the left direction
+    [(-1, 0), (0, -1)], 
+    # A corner is when there is no one below me or next to me to the left direction
+    [(1, 0), (0, -1)], 
+]
+
+INTERNAL_CORNERS = [
+    # An internal corner is when there is someone above me and to the right of me, but not to the right 1 and above 1
+    [(-1, 0), (0, 1), (-1, 1)],
+    # An internal corner is when there is someone below me and to the right of me, but not to the right 1 and below 1
+    [(1, 0), (0, 1), (1, 1)],
+    # An internal corner is when there is someone below me and to the left of me, but not to the left 1 and below 1
+    [(1, 0), (0, -1), (1, -1)],
+    # An internal corner is when there is someone above me and to the left of me, but not to the left 1 and above 1
+    [(-1, 0), (0, -1), (-1, -1)],
+]
+
 def get_area_for_each(input_list):
     """
     Given an input list containing rows of letters
-
     get a count of how many letters there are in each
 
     return area count
@@ -40,48 +61,10 @@ def traverse_letters(input_list):
         if any(letter in letters_remaining for letter in row):
             for col_num, val in enumerate(row):
                 if val in letters_remaining:
-                    print()
-                    print('letter:', val)
                     _, area, perim = find_touching(val, input_list, row_num, col_num)
                     finals.append([val, area, perim])
 
     return finals
-
-
-"""
-what is a corner? 
-
-Traditional Corners [DONE!]: 
-A corner is when there is no one above me or next to me to the right direction
-or 
-A corner is when there is no one below me or next to me to the right direction
-or 
-A corner is when there is no one above me or next to me to the left direction
-or 
-A corner is when there is no one below me or next to me to the left direction
-
-Internal Corners: 
-An internal corner is when there is someone above me and to the right of me, but not to the right 1 and above 1
-or 
-...
-"""
-
-TRADITIONAL_CORNER = [
-    # A corner is when there is no one above me or next to me to the right direction
-    [(-1, 0), (0, 1)], 
-    # # A corner is when there is no one below me or next to me to the right direction
-    [(1, 0), (0, 1)],
-    # A corner is when there is no one above me or next to me to the left direction
-    [(-1, 0), (0, -1)], 
-    # A corner is when there is no one below me or next to me to the left direction
-    [(1, 0), (0, -1)], 
-]
-
-INTERNAL_CORNERS = [
-# An internal corner is when there is someone above me and to the right of me, but not to the right 1 and above 1
-    [(-1, 0), (0, 1), (-1, 1)]
-]
-
 
 def find_touching(letter, input_list, row_num, col_num):
     """
@@ -189,13 +172,11 @@ def sum_vals(input):
 
 if __name__ == '__main__':
     input_list = []
-    with open('tiny_input.txt', 'r') as f:
+    with open('input.txt', 'r') as f:
         for line in f.readlines(): 
             input_list.append(list(line.strip()))
 
     final_traverse = traverse_letters(input_list)
-    print(final_traverse)
+    sum_values = sum_vals(final_traverse)
 
-    # sum_values = sum_vals(final_traverse)
-
-    # print('the answer for part two is: ', sum_values)
+    print('the answer for part two is: ', sum_values)
