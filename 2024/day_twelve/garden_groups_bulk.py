@@ -127,7 +127,6 @@ def find_touching(letter, input_list, row_num, col_num):
             col_check_x = row_num + internal_corner[1][0]
             col_check_y = col_num + internal_corner[1][1]
 
-
             not_value_x = row_num + internal_corner[2][0]
             not_value_y = col_num + internal_corner[2][1]
 
