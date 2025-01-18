@@ -40,11 +40,11 @@ def traverse_letters(input_list):
         if any(letter in letters_remaining for letter in row):
             for col_num, val in enumerate(row):
                 if val in letters_remaining:
-                    #row: [directions checked
+                    print()
+                    print('letter:', val)
                     _, area, perim = find_touching(val, input_list, row_num, col_num)
                     finals.append([val, area, perim])
-    
-    # not perimiter returns the checked boundary    
+
     return finals
 
 
@@ -61,8 +61,9 @@ or
 A corner is when there is no one below me or next to me to the left direction
 
 Internal Corners: 
-or
-A corner is when there is no on next to me to the right, but there is someone above me and above to the right of them
+An internal corner is when there is someone above me and to the right of me, but not to the right 1 and above 1
+or 
+...
 """
 
 TRADITIONAL_CORNER = [
@@ -75,6 +76,12 @@ TRADITIONAL_CORNER = [
     # A corner is when there is no one below me or next to me to the left direction
     [(1, 0), (0, -1)], 
 ]
+
+INTERNAL_CORNERS = [
+# An internal corner is when there is someone above me and to the right of me, but not to the right 1 and above 1
+    [(-1, 0), (0, 1), (-1, 1)]
+]
+
 
 def find_touching(letter, input_list, row_num, col_num):
     """
@@ -100,44 +107,58 @@ def find_touching(letter, input_list, row_num, col_num):
         input_list[row_num][col_num] = set_letter
         
         for corner in TRADITIONAL_CORNER: 
-            print('-----')
-            print('I am at location: ')
-            print(row_num, col_num)
             checker = True
             #row check
             row_check_x = row_num + corner[0][0]
             row_check_y = col_num + corner[0][1]
-            print('row to check')
-            print(row_check_x,row_check_y )
             # check the row_check is either oob or not a letter
             # if not set checker to False
             try: 
                 check = (row_check_x < 0 or row_check_y < 0 or row_check_x >= len(input_list) or row_check_y >= len(input_list[0]))
                 if not check and (letter == input_list[row_check_x][row_check_y] or set_letter == input_list[row_check_x][row_check_y]): 
-                    print('first row set to false')
                     checker = False
             except IndexError: 
                 pass
-
             #col check 
             col_check_x = row_num + corner[1][0]
             col_check_y = col_num + corner[1][1]
-            print(col_check_x,col_check_y )
 
             # check the col_check is either oob or not a letter
             # if not set checker to False
             try: 
                 check = (col_check_x < 0 or col_check_y < 0 or col_check_x >= len(input_list) or col_check_y >= len(input_list[0]))
                 if not check and (letter == input_list[col_check_x][col_check_y] or set_letter == input_list[col_check_x][col_check_y]): 
-                    print('second row set to false')
                     checker = False
             except IndexError: 
                 pass
             
             if checker: 
-                print('i have passed')
                 corners += 1
         
+        
+        for internal_corner in INTERNAL_CORNERS: 
+            checker = False
+            row_check_x = row_num + internal_corner[0][0]
+            row_check_y = col_num + internal_corner[0][1]
+
+            col_check_x = row_num + internal_corner[1][0]
+            col_check_y = col_num + internal_corner[1][1]
+
+
+            not_value_x = row_num + internal_corner[2][0]
+            not_value_y = col_num + internal_corner[2][1]
+
+            # if not values are out of bounds dont do anything
+            check = (not_value_x < 0 or not_value_y < 0 or not_value_x >= len(input_list) or not_value_y >= len(input_list[0]))
+            if not check and (input_list[not_value_x][not_value_y] not in [letter, set_letter]): 
+                if input_list[row_check_x][row_check_y] in [letter, set_letter] and input_list[col_check_x][col_check_y] in [letter, set_letter]:
+                    checker = True
+                # if we arent out of bounds and the letter in the value is not the letter of set_letter
+                # we can assume the others exist
+            
+            if checker: 
+                corners += 1
+                
         for direction in DIRECTIONS:
             check_row = row_num + direction[0]
             check_col = col_num + direction[1]
@@ -148,7 +169,6 @@ def find_touching(letter, input_list, row_num, col_num):
                 corners += searched_corners
 
     return input_list, area, corners
-
 
 
 def sum_vals(input):
