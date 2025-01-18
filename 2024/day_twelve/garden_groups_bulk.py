@@ -12,16 +12,6 @@ DIRECTIONS = [
     (0, -1),  # left
 ]
 
-CORNER = [
-    # right upper corner
-    [1, 1], 
-    [-1, -1]
-    # left upper corner
-    # right lower corner
-    # left lower corner
-]
-
-
 def get_area_for_each(input_list):
     """
     Given an input list containing rows of letters
@@ -57,47 +47,34 @@ def traverse_letters(input_list):
     # not perimiter returns the checked boundary    
     return finals
 
-def find_corners(checked_locations): 
-    """
-        Given a list of checked values for perimeters
-
-        find all the corners
-        a corner is where we have the same column but 1 row seperated either up or down AND
-        same row and 1 col left or right 
-    """
-    final_ = []
-    for locations in checked_locations: 
-        print(locations)
-        checked = [list(t) for t in locations[2]]
-        corners = 0
-        for spot in checked: 
-            # check corners
-            row = spot[0]
-            col = spot[1]
-            for corner in CORNER: 
-                corner_row = corner[0]
-                corner_col = corner[1]
-                # take my location and look for +1 +1 
-
-                check_me = [row+corner_row, col+corner_col]
-                if check_me in checked: 
-                    corners += 1
-            # check row
-            # check col
-
-            # create a list with new count and area and letter
-        final_.append([locations[0], locations[1], corners])
-
-    for xi in final_: 
-        print(xi)
-    
-    return final_        
 
 """
-TODO:
-I think we might be able to just check corners and add to a list within the find_touchng !!
+what is a corner? 
+
+Traditional Corners [DONE!]: 
+A corner is when there is no one above me or next to me to the right direction
+or 
+A corner is when there is no one below me or next to me to the right direction
+or 
+A corner is when there is no one above me or next to me to the left direction
+or 
+A corner is when there is no one below me or next to me to the left direction
+
+Internal Corners: 
+or
+A corner is when there is no on next to me to the right, but there is someone above me and above to the right of them
 """
 
+TRADITIONAL_CORNER = [
+    # A corner is when there is no one above me or next to me to the right direction
+    [(-1, 0), (0, 1)], 
+    # # A corner is when there is no one below me or next to me to the right direction
+    [(1, 0), (0, 1)],
+    # A corner is when there is no one above me or next to me to the left direction
+    [(-1, 0), (0, -1)], 
+    # A corner is when there is no one below me or next to me to the left direction
+    [(1, 0), (0, -1)], 
+]
 
 def find_touching(letter, input_list, row_num, col_num):
     """
@@ -110,31 +87,69 @@ def find_touching(letter, input_list, row_num, col_num):
         if the letter is touching in any direction, traverse that direction
         else add row, col to the bulk_fencing list
     
-    
+
     after all that set it to its numerical ordenance
 
     return updated input_list, perimeter, area
     """
     area = 0
-    perimeter = set()
+    corners = 0
     set_letter = ord(letter) - 97
     if letter == input_list[row_num][col_num]:
         area = area + 1
         input_list[row_num][col_num] = set_letter
+        
+        for corner in TRADITIONAL_CORNER: 
+            print('-----')
+            print('I am at location: ')
+            print(row_num, col_num)
+            checker = True
+            #row check
+            row_check_x = row_num + corner[0][0]
+            row_check_y = col_num + corner[0][1]
+            print('row to check')
+            print(row_check_x,row_check_y )
+            # check the row_check is either oob or not a letter
+            # if not set checker to False
+            try: 
+                check = (row_check_x < 0 or row_check_y < 0 or row_check_x >= len(input_list) or row_check_y >= len(input_list[0]))
+                if not check and (letter == input_list[row_check_x][row_check_y] or set_letter == input_list[row_check_x][row_check_y]): 
+                    print('first row set to false')
+                    checker = False
+            except IndexError: 
+                pass
+
+            #col check 
+            col_check_x = row_num + corner[1][0]
+            col_check_y = col_num + corner[1][1]
+            print(col_check_x,col_check_y )
+
+            # check the col_check is either oob or not a letter
+            # if not set checker to False
+            try: 
+                check = (col_check_x < 0 or col_check_y < 0 or col_check_x >= len(input_list) or col_check_y >= len(input_list[0]))
+                if not check and (letter == input_list[col_check_x][col_check_y] or set_letter == input_list[col_check_x][col_check_y]): 
+                    print('second row set to false')
+                    checker = False
+            except IndexError: 
+                pass
+            
+            if checker: 
+                print('i have passed')
+                corners += 1
+        
         for direction in DIRECTIONS:
             check_row = row_num + direction[0]
             check_col = col_num + direction[1]
             check = (check_row < 0 or check_col < 0 or check_row >= len(input_list) or check_col >= len(input_list[0]))
-            if check:
-                perimeter.add((check_row, check_col))
-            elif input_list[check_row][check_col] != letter and input_list[check_row][check_col] != set_letter:
-                perimeter.add((check_row, check_col))
-            elif input_list[check_row][check_col] == letter:
-                input_list, searched_area, searched_perimeter = find_touching(letter, input_list, check_row, check_col)
-                area = area + searched_area
-                perimeter.update(searched_perimeter)
+            if not check and input_list[check_row][check_col] == letter:
+                input_list, searched_area, searched_corners = find_touching(letter, input_list, check_row, check_col)
+                area += searched_area
+                corners += searched_corners
 
-    return input_list, area, perimeter
+    return input_list, area, corners
+
+
 
 def sum_vals(input):
     """
@@ -154,13 +169,12 @@ def sum_vals(input):
 
 if __name__ == '__main__':
     input_list = []
-    with open('tiny_example.txt', 'r') as f:
+    with open('tiny_input.txt', 'r') as f:
         for line in f.readlines(): 
             input_list.append(list(line.strip()))
 
     final_traverse = traverse_letters(input_list)
-
-    corners = find_corners(final_traverse)
+    print(final_traverse)
 
     # sum_values = sum_vals(final_traverse)
 
