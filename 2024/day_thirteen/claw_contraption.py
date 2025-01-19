@@ -2,16 +2,12 @@
 https://adventofcode.com/2024/day/13
 
 The solution for part one is:  31897
+time elapsed with generator:  0:00:05.222259
 """
 
 import math
+import datetime 
 from itertools import product
-
-TOKENS = {
-    'A': 3, 
-    'B': 1
-}
-
 
 def combinations(formatted_directions): 
     """
@@ -22,6 +18,7 @@ def combinations(formatted_directions):
         sum them 
         add tokens to a dict, list
     """
+
     final_token_count = 0
     for combo in formatted_directions: 
         a_buttons = combo[0]
@@ -29,11 +26,8 @@ def combinations(formatted_directions):
         prize = combo[2]
         tokens = []
         max_value = min(a_buttons[0], b_buttons[0])
-        max_iterations = math.ceil(prize[0] / max_value)
 
-        cartesian_product = list(product(range(1, max_iterations), repeat=2))
-
-        for i in cartesian_product: 
+        for i in generate_cartesian(prize[0], max_value): 
             if (a_buttons[0] * i[0]) +  (b_buttons[0] * i[1]) == prize[0]: 
                 if (a_buttons[1] * i[0]) +  (b_buttons[1] * i[1]) == prize[1]: 
                     t = (3 * i[0]) + (i[1]*1)
@@ -45,7 +39,12 @@ def combinations(formatted_directions):
     return final_token_count
 
 
+def generate_cartesian(prize_value, max_value): 
+    # prize_value += 10000000000000
+    max_iterations = math.ceil(prize_value / max_value)
 
+    for combo in product(range(1, max_iterations), repeat=2): 
+        yield combo
 
 def format_input(input_list): 
     """
@@ -78,10 +77,11 @@ def run():
                 directions.append(i.strip())
 
     formatted_directions = format_input(directions)
-    tokens = combinations(formatted_directions)
 
+    start = datetime.datetime.now()
+    tokens = combinations(formatted_directions)    
     print('The solution for part one is: ', tokens)
-
+    print('time elapsed: ', datetime.datetime.now() - start)
 
 if __name__ == "__main__": 
     run()
