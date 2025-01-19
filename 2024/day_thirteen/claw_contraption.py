@@ -3,48 +3,13 @@ https://adventofcode.com/2024/day/13
 
 The solution for part one is:  31897
 time elapsed with generator:  0:00:05.222259
+switching to a math equation: time elapsed:  0:00:00.000361
+jeez!
+
+
 """
-
 import math
-import datetime 
-from itertools import product
-
-def combinations(formatted_directions): 
-    """
-        Given two values, find the most amount of calls possible
-        by splitting Prize/smaller of the two buttons
-
-        then calculate all the possible products
-        sum them 
-        add tokens to a dict, list
-    """
-
-    final_token_count = 0
-    for combo in formatted_directions: 
-        a_buttons = combo[0]
-        b_buttons = combo[1]
-        prize = combo[2]
-        tokens = []
-        max_value = min(a_buttons[0], b_buttons[0])
-
-        for i in generate_cartesian(prize[0], max_value): 
-            if (a_buttons[0] * i[0]) +  (b_buttons[0] * i[1]) == prize[0]: 
-                if (a_buttons[1] * i[0]) +  (b_buttons[1] * i[1]) == prize[1]: 
-                    t = (3 * i[0]) + (i[1]*1)
-                    tokens.append(t)
-    
-        if tokens: 
-            final_token_count += min(tokens)
-
-    return final_token_count
-
-
-def generate_cartesian(prize_value, max_value): 
-    # prize_value += 10000000000000
-    max_iterations = math.ceil(prize_value / max_value)
-
-    for combo in product(range(1, max_iterations), repeat=2): 
-        yield combo
+import numpy as np
 
 def format_input(input_list): 
     """
@@ -62,6 +27,50 @@ def format_input(input_list):
         formatted_directions.append([first, second, third])
 
     return formatted_directions
+
+
+def do_math(prize, a_buttons, b_buttons, BIG_NUMBER, i): 
+    b = ((prize[0] + BIG_NUMBER) - (a_buttons[0] * i)) / b_buttons[0]
+    if b < 0: 
+        return b
+    if b % 1 == 0:
+        if (a_buttons[1] * i) +  (b_buttons[1] * b) == prize[1] + BIG_NUMBER: 
+            t = (3 * i) + (b * 1)
+            print('a and b matches')
+            return t
+    
+
+def combinations(formatted_directions, BIG_NUMBER = 0): 
+    """
+    Given two values, find the most amount of calls possible
+    by splitting Prize/smaller of the two buttons
+
+    the do math and if the calculations work, 
+    add tokens to a dict, list
+    """
+
+    final_token_count = 0
+    for combo in formatted_directions: 
+        print(combo)
+        a_buttons = combo[0]
+        b_buttons = combo[1]
+        prize = combo[2]
+        tokens = []
+        max_value = min(a_buttons[0], b_buttons[0])
+        
+        rg = math.ceil((prize[0]+BIG_NUMBER)/(max_value))
+
+        for i in range(rg): 
+            b = do_math(prize, a_buttons, b_buttons, BIG_NUMBER, i)
+            if b:
+                if b < 0: 
+                    continue
+                else:
+                    tokens.append(b)
+        if tokens: 
+            final_token_count += min(tokens)
+
+    return final_token_count
 
 
 def run(): 
@@ -82,6 +91,10 @@ def run():
     tokens = combinations(formatted_directions)    
     print('The solution for part one is: ', tokens)
     print('time elapsed: ', datetime.datetime.now() - start)
+
+    # BIG_NUMBER = 10000000000000
+    # print('The solution for part two is: ', combinations(formatted_directions, BIG_NUMBER))
+
 
 if __name__ == "__main__": 
     run()
