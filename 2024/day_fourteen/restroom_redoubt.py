@@ -2,11 +2,23 @@
 https://adventofcode.com/2024/day/14
 
 """
+import math
+
+def check_quads(final_locations, row, col): 
+    quadrants = [
+        # (row 0, row end), (col start, col end)
+        [(0, math.ceil(row/2)), (0, math.ceil(col/2))], #q1
+        [(0, math.ceil(row/2)),  math.ceil(col/2), col], #q1
+        [(math.ceil(row/2), row), math.ceil(col/2), col], #q3
+        [(math.ceil(row/2), row), (0, math.ceil(col/2))], # q4
+    ]
+
+    for quad in quadrants: 
+        print(quad)
 
 
-def safe_area(quads, formatted_input, seconds, board): 
-    print(quads)
-
+def safe_area(formatted_input, seconds, board): 
+    finals = []
     for _, val in enumerate(formatted_input): 
         col = val[0][0]
         row = val[0][1]
@@ -16,23 +28,9 @@ def safe_area(quads, formatted_input, seconds, board):
 
         final_col = (col + vel_col)
         final_row = (row + vel_row)
+        finals.append([final_row%board[1], final_col%board[0]])
 
-        if final_col/board[0] > 0 :
-            final_col = col + (final_col%board[0])
-        else: 
-            final_col = col - (final_col%board[0])
-
-        if final_row/board[1] > 0: 
-            final_row = row + (final_row%board[1])
-        else: 
-            final_row = row - (final_row%board[1])
-
-
-        print(final_row, final_col)
-
-
-def calculate_quadrants(x, y): 
-    return int(x/2), int(y/2)
+    return finals
 
 def format_input(file_input):
     formatted_input = [] 
@@ -59,10 +57,9 @@ def run():
             file_input.append(a.strip())
 
     formatted_input = format_input(file_input)
-    quads = calculate_quadrants(space_x, space_y)
-
-    safe_area(quads, formatted_input, seconds, (space_x, space_y))
+    final_locations = safe_area(formatted_input, seconds, (space_x, space_y))
     
+    check_quads(final_locations, col=space_x, row=space_y)
     
 
 if __name__ == "__main__": 
