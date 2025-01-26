@@ -4,7 +4,11 @@ https://adventofcode.com/2023/day/5
 
 from collections import defaultdict
 
+
 def format_input(): 
+    """
+    Semi format the input from the file
+    """
     maps = defaultdict(list)
     temp = []
     with open('tiny_input.txt', 'r') as f: 
@@ -21,10 +25,51 @@ def format_input():
                     temp.append(line.strip().split(' ')[0])  
     return maps
 
+def create_mapping(mapper): 
+    """
+    Given a slightly formatted dict, remove the seeds and 
+    structure the lists so that they have the required ranges
+
+    return a list of seeds and a dictionary of the other mappings
+    """
+    seeds = mapper['seeds']
+    mapping_list = defaultdict(list)
+    mapper.pop('seeds')
+
+    for key in mapper.keys(): 
+        mapping_list[key] = []
+        for mapping in mapper[key]: 
+            range_ = mapping[2]
+
+            first = list(range(mapping[0], mapping[0] + range_))
+            second = list(range(mapping[1], mapping[1] + range_))
+            mapping_list[key].append([first, second])
+    
+    return seeds, mapping_list
+
+def find_corresponding_values(seed, almanac): 
+    totals = [seed]
+    for i in almanac: 
+        val = []
+        for l in almanac[i]: 
+            if seed in l[1]:
+                seed_index = l[1].index(seed)
+                seed = l[0][seed_index]
+                val = seed
+        if not val: 
+            val = seed
+        totals.append(val)
+            
+    return totals
+
+
 def run(): 
     map_ = format_input()
-    for a in map_: 
-        print(a)
+    seeds, final_map = create_mapping(map_)
+
+    for seed in seeds: 
+        totals = find_corresponding_values(seed, final_map)
+        print(totals)
 
 if __name__ == "__main__": 
     run()
