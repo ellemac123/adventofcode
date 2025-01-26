@@ -92,10 +92,43 @@ def run(input_map, coordinates_row):
     starting_position = find_starting_position(input_map)
 
     final_map = move(input_map, starting_position, coordinates_row)
+    
     total_sum = calculate_box_positions(final_map=final_map)
 
     return total_sum
 
+
+def create_new_map(input_map): 
+    """
+    Create new map: 
+        - If the tile is #, the new map contains ## instead.
+        - If the tile is O, the new map contains [] instead.
+        - If the tile is ., the new map contains .. instead.
+        - If the tile is @, the new map contains @. instead.
+    """
+    updated_map = []
+
+    for row in input_map: 
+        new_row = []
+        for col in row: 
+            if col in ["#", '.']: 
+                new_row.extend([col, col])
+            elif col == '@': 
+                new_row.extend([col, '.'])
+            else: 
+                new_row.extend(['[', ']'])
+        updated_map.append(new_row)
+
+    return updated_map
+
+
+def run_part_two(input_map, coordinates_row): 
+    """
+    Update the map to the new format and then call run
+    """
+    updated_map = create_new_map(input_map)
+
+    run(updated_map, coordinates_row)
 
 if __name__ == "__main__": 
     """
@@ -105,7 +138,7 @@ if __name__ == "__main__":
     input_map = []
     temp_coords = []
     coords = []
-    with open('input.txt', 'r') as f: 
+    with open('tiny_input.txt', 'r') as f: 
         lines = f.readlines()
         for iterr, a in enumerate(lines): 
             if a == '\n': 
@@ -120,3 +153,6 @@ if __name__ == "__main__":
 
     result = run(input_map, coords)
     print('The answer for part one is: ', result)
+
+    # part two
+    second_result = run_part_two(input_map, coords)
