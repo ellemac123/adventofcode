@@ -23,7 +23,7 @@ python hoof_it.py
 ## AoC Challenge in TypeScript
 
 ### 2019
-I'll be working through the 2019 challenges to try and teach myself TypeScript. 
+I'll be working through the 2019 challenges to try and teach myself TypeScript. I'll do each problem in Python and Typescript. 
 
 ### Installation and Setup
 I'll be using Deno to run each file. 
