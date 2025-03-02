@@ -10,10 +10,10 @@ function readFileFunction(): Promise<string> {
     return new Promise((resolve, reject) => {
         fs.readFile('input.txt', 'utf-8', (err, data) => {
             if(err) {
-                console.error('cannot read local file')
-                reject('cannot read local file')
+                console.error('cannot read local file');
+                reject('cannot read local file');
             }
-            resolve(data)
+            resolve(data);
         });
     }
 )}
@@ -26,7 +26,7 @@ function calculateEquation(listVelocities: string[]): number[]{
     then subtracting 2
     */
     let totalFuelRequired = 0;
-    let totalFuelRequiredPartTwo = 0
+    let totalFuelRequiredPartTwo = 0;
 
     listVelocities.forEach((velocity:string)=>{
         let tempVelocity: number = (velocity as unknown) as number;
@@ -58,11 +58,11 @@ async function main(): Promise<number[] | string> {
 
     let velocities: Array<string> = fileData.split('\n');
     const totalFuelNeeded: Array<number> = calculateEquation(velocities);
-    return totalFuelNeeded
+    return totalFuelNeeded;
     
 }
 
 // run code and print the result to screen
 let result: string | number[] = await main();
-console.log(`The answer to part one is: ${result[0]}`)
-console.log(`The answer to part one is: ${result[1]}`)
+console.log(`The answer to part one is: ${result[0]}`);
+console.log(`The answer to part one is: ${result[1]}`);

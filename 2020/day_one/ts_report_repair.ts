@@ -5,7 +5,7 @@ The solution for part one is: 319531
 */ 
 import * as fs from 'node:fs'; 
 
-function calculateRepair(inputData: string[]): any {
+function calculateRepair(inputData: string[]): number {
     // Find two values that sum to 2020 in the list and return the product
     for(let value of inputData){
         let numVal = Number(value);
@@ -15,8 +15,20 @@ function calculateRepair(inputData: string[]): any {
             return numDiff * numVal; 
         }
     }
-
     return -1;
+}
+
+function calculateSecondRepair(inputData: string[]): number{
+    // Return the product of the three values that add to 2020 in the list
+    for(let value of inputData){
+        for (let bValue of inputData){
+            let tempC = 2020 - Number(bValue) - Number(value)
+            if (inputData.includes(tempC.toString())){
+                return Number(tempC) * Number(bValue) * Number(value)
+            }
+        }
+    }
+    return -1
 }
 
 function readFileFunction(): Promise<string> {
@@ -32,20 +44,24 @@ function readFileFunction(): Promise<string> {
     }
 )}
 
-async function main(): Promise<number | string> {
+async function main(): Promise<number[] | string> {
+    // Orchestrator of the file read and calculations
     let fileData: string; 
 
     try{
         fileData = await readFileFunction();
     } catch(err){
-        return('Error while reading file '); 
+        return('Error while reading file.'); 
     }
 
     let repairData: Array<string> = fileData.split('\n');
     let partOneSolution: number = calculateRepair(repairData); 
+    let partTwoSolution: number = calculateSecondRepair(repairData); 
 
-    return partOneSolution;
+    return [partOneSolution, partTwoSolution];
 }
 
-let answer = await main(); 
-console.log(`The solution for part one is: ${answer}`);
+let answer: number[] | string = await main(); 
+
+console.log(`The solution for part one is: ${answer[0]}`);
+console.log(`The solution for part two is: ${answer[1]}`);
